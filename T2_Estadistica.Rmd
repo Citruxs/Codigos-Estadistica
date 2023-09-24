@@ -1,0 +1,56 @@
+---
+title: "Tarea 2 estadística"
+author: "Andres Limon Cruz"
+date: "2023-09-23"
+output: pdf_document
+---
+
+```{r message=FALSE}
+library(tidyverse)
+```
+
+Una vez que hemos calculado la inversa de nuestra función de probabilidad y con ayuda del teorema fundamental de la simulación, podemos simular nuestras variables aleatorias con la distribución deseada
+```{r}
+sim <- function(x,theta){
+        theta <- theta + 1
+        (x)^(1/(theta-1)) #Omitimos un multiplo de theta y 
+                          #cambiamos su valor para dejar de 
+                          #normalizar nuestra pdf
+}
+
+fun <- function(x,theta){
+        theta <- theta +1
+        return(runif(1,0,1)*theta*x^(theta-1))
+}
+        
+```
+
+Procedemos a crear un vector de una distribución uniforme entre 0 y 1
+```{r}
+Uniforme <- runif(10000,0,1)
+```
+
+Así pasamos a evaluar nuestra función con ayuda de sapply
+```{r}
+theta = 3
+resultado <- data.frame("Simulacion" = sapply(Uniforme, sim, theta))
+```
+
+Graficamos nuestros resultados en un histograma para ver como nos ha salido
+
+```{r}
+ggplot(data = resultado) + geom_point(mapping = aes(x = Simulacion , 
+          y = sapply(Uniforme,fun,theta)), color = "blue")+xlab("x") + 
+          ylab("f(x)")
+``` 
+
+Verificamos el estimador por momentos 
+```{r}
+-(mean(resultado$Simulacion)/(mean(resultado$Simulacion)-1))
+```
+Verificamos el estimador por máximo verosímil
+```{r}
+length(resultado$Simulacion)/(-sum(sapply(resultado$Simulacion,log)))
+```
+
+

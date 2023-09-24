@@ -1,0 +1,42 @@
+---
+title: "Tarea moral 1 - Estadistica"
+author: "Andres Limon Cruz"
+date: "2023-08-21"
+output: pdf_document
+---
+Comenzamos definiendo una muestra de variables aleatorias con distribución N(0,1)
+
+```{r}
+tamano <- 1000000
+media <- 0
+varianza <- 1
+muestra <- rnorm(tamano,media,varianza)
+```
+
+Entonces supongamos que no conocemos los parámetros de la media y la varianza y los obtendremos a partir de una estimación puntual del primer y tercer momento poblacional
+
+$\to \mu_1 = \mathbb{E}(X) = \mu = M_1 = \frac{1}{n} \sum_{i = 1}^{n}(X_i) = \bar{x}$
+
+Calculemos ahora el tercer momento de poblacional
+
+$\to \mu_3 = \mathbb{E}(X^3) = \mu(3\sigma^2 + \mu^2) = M_3 = \frac{1}{n}\sum_{i = 1}^{n}(X_i^3)$
+
+$\to \sigma^2 = \dfrac{\frac{1}{n}\sum_{i = 1}^{n}(X_i^3)}{3\mu} - \dfrac{\mu^2}{3}$
+
+$\to \sigma^2 = \dfrac{\sum_{i = 1}^{n}(X_i^3)}{3(\sum_{i = 1}^{n}(X_i))} - \dfrac{(\frac{1}{n} \sum_{i = 1}^{n}(X_i))^2}{3}$
+
+Veamos que tan precisa es nuestra estimación puntual
+
+```{r}
+mu <- mean(muestra)
+sigma = (sum(muestra^3))/(3*sum(muestra)) - mean(muestra)^2/(3)
+sprintf('mu = %s',mu)
+sprintf('sigma = %s',sigma)
+```
+En cambio si tomamos la estimación puntual con el segundo momento veremos que es mas cercano
+
+```{r}
+sigma2 <- sum((muestra - mu)^2)/tamano 
+sprintf('sigma = %s', sigma2)
+```
+

@@ -1,0 +1,51 @@
+---
+title: "Estadistica"
+author: "Andres Limon Cruz"
+date: "2023-09-05"
+output: pdf_document
+---
+Cargamos las paqueterías que usaremos para el análisis exploratorio de datos
+```{r}
+library(tidyverse)
+```
+Cargamos los datos en un dataframe
+
+```{r}
+dias_perdidos_df <- read_csv("C:/Users/andre/Desktop/dias_perdidos.csv")
+```
+Encontramos las estadísticas básicas del dataframe con la funcion summary
+
+```{r}
+summary(dias_perdidos_df)
+sd(dias_perdidos_df$dias_perdidos)
+```
+Modificamos el dataframe y agregamos una nueva columna con los datos en un formato de String
+```{r}
+dias_perdidos_df <- dias_perdidos_df %>% mutate(Cantidad_de_dias_perdidos = paste(dias_perdidos))
+```
+Creamos un grafico de barras con los datos
+```{r}
+ggplot(data = dias_perdidos_df) + geom_bar(mapping = aes(x = Cantidad_de_dias_perdidos, fill = Cantidad_de_dias_perdidos)) + xlab("Cantidad de dias perdidos") + ylab("Cantidad de personas con esos dias perdidos")
+```
+Carguemos ahora los datos del inciso b)
+```{r}
+datos_alturas_df <- read_csv("C:/Users/andre/Desktop/Alturas.csv")
+```
+
+Encontramos las estadísticas básicas con la función summary
+```{r}
+summary(datos_alturas_df)
+sd(datos_alturas_df$Alturas)
+```
+Convertimos los datos de la columna de datos numéricos a cadenas
+
+```{r}
+datos_alturas_df <- datos_alturas_df %>% mutate(alturas = paste(Alturas))
+```
+
+
+Graficamos los datos con un histograma
+```{r}
+ggplot(datos_alturas_df) + geom_bar(mapping = aes(x = alturas, fill = alturas)) + xlab("Alturas registradas") + ylab("Cantidad de alturas registradas")
+```
+
