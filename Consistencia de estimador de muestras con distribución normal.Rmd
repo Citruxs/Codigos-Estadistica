@@ -1,0 +1,44 @@
+---
+title: "Consistencia de estimadores"
+author: "Andres Limon Cruz"
+date: "2023-10-04"
+output: pdf_document
+---
+
+En este código simularemos diferentes muestras de una distribución normal para corroborar que sus estimadores por momentos son consistentes. Primero cargamos los paquetes que ocuparemos
+
+```{r}
+library(tidyverse)
+```
+
+Definimos nuestros estimadores
+
+```{r}
+estimador_media <- function(x){
+        return(mean(x))
+}
+
+estimador_desv_est <- function(x){
+        return(sum((x-estimador_media(x))^2)/(length(x)-1))
+}
+```
+
+Realizamos con un bucle nuestras estimaciones del parametro $/mu$ y $\sigma^2$
+
+```{r}
+n <- c(2:1000)
+
+estimacion1 <- c()
+estimacion2 <- c()
+
+for (i in n){
+        muestra <- rnorm(i,0,1)
+        estimacion1 <- c(estimacion1, estimador_media(muestra))
+        estimacion2 <- c(estimacion2, estimador_desv_est(muestra))
+}
+
+ggplot() + geom_point(mapping = aes(x = n, y = estimacion1)) + geom_line(mapping = aes(x = n, y = 0)) + ggtitle("Estimación de la media con muestras de tamaño 2 a 1000") + ylab("Estimador") + xlab("Tamaño de la muestra")
+ggplot() + geom_point(mapping = aes(x = n, y = estimacion2)) + geom_line(mapping = aes(x = n, y = 1)) + ggtitle("Estimación de la desviación estandar con muestras de tamaño 2 a 1000") + ylab("Estimador") + xlab("Tamaño de la muestra")
+
+```
+
